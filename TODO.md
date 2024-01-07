@@ -1,0 +1,3 @@
+- [x] Všechny města pod sebou
+- [ ] Front-end J-Query
+- [ ] Azure upload

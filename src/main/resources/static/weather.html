@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DLYGJCXHJD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-DLYGJCXHJD');
+    </script>
+    <link rel="stylesheet" href="styleFinal.css">
+    <title>Personal Website</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <title>Weather App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<header>
+    <nav class="topnav">
+        <a href="/">Home</a>
+        <div class="dropdown">
+            <button class="dropbtn">Node.js</button>
+            <a href="/weather.html">Weather App</a>
+        </div>
+        <a href="https://github.com/David-Szczepanik">Github</a>
+        <a href="https://www.linkedin.com/in/david-szczepanik/">LinkedIn</a>
+        <img src="images/sun.png" id="icon" onclick="themeToggle()" alt="dark mode icon">
+    </nav>
+</header>
+<main>
+    <h1>Weather App</h1>
+    <div>
+
+    <select id="citySelect">
+        <option value="Praha">Praha</option>
+        <option value="Ostrava">Ostrava</option>
+        <option value="Sydney">Sydney</option>
+        <option value="Rovaniemi">Rovaniemi</option>
+        <option value="London">London</option>
+        <option value="Ottawa">Ottawa</option>
+        <option value="Karvina">Karvina</option>
+    </select>
+
+    <button id="getWeather">Get Weather</button>
+    <button id="getAllWeather">Get Weather for All Cities</button>
+    </div>
+
+    <div id="weatherData"></div>
+</main>
+<footer>
+    <p>&copy; 2023</p>
+</footer>
+<script src="dark-mode.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#getWeather").click(function(){
+            var selectedCity = $("#citySelect").val();
+            $.ajax({
+                url: 'http://localhost:8080/weather/' + selectedCity,
+                type: 'GET',
+                success: function(data) {
+                    var weatherHtml = '<p>Location: ' + data.location + '</p>' +
+                      '<p>Weather Description: ' + data.weather_description + '</p>' +
+                      '<p>Relative Humidity: ' + data.rel_humidity + '</p>' +
+                      '<p>Timestamp: ' + data.timestamp + '</p>' +
+                      '<p>Temperature (Celsius): ' + data.temp_celsius + '</p>' +
+                      '<p>Wind Direction: ' + data.wind_direction + '</p>' +
+                      '<p>Wind Speed (mps): ' + data.windSpeed_mps + '</p>';
+                    $('#weatherData').html(weatherHtml);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        $("#getAllWeather").click(function(){
+            $.ajax({
+                url: 'http://localhost:8080/weather-all',
+                type: 'GET',
+                success: function(data) {
+                    var weatherHtml = '';
+                    for (var i = 0; i < data.length; i++) {
+                        weatherHtml += '<p>Location: ' + data[i].location + '</p>' +
+                          '<p>Weather Description: ' + data[i].weather_description + '</p>' +
+                          '<p>Relative Humidity: ' + data[i].rel_humidity + '</p>' +
+                          '<p>Timestamp: ' + data[i].timestamp + '</p>' +
+                          '<p>Temperature (Celsius): ' + data[i].temp_celsius + '</p>' +
+                          '<p>Wind Direction: ' + data[i].wind_direction + '</p>' +
+                          '<p>Wind Speed (mps): ' + data[i].windSpeed_mps + '</p><hr>';
+                    }
+                    $('#weatherData').html(weatherHtml);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
