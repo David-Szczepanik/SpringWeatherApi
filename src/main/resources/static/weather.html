@@ -48,58 +48,65 @@
     <button id="getAllWeather">Get Weather for All Cities</button>
     </div>
 
-    <div id="weatherData"></div>
+    <div style="text-align: center;">
+        <div style="display: inline-block; text-align: left;">
+            <div id="weatherData"></div>
+        </div>
+    </div>
+
 </main>
 <footer>
     <p>&copy; 2023</p>
 </footer>
 <script src="dark-mode.js"></script>
 <script>
-    $(document).ready(function(){
-        $("#getWeather").click(function(){
-            var selectedCity = $("#citySelect").val();
-            $.ajax({
-                url: 'http://localhost:8080/weather/' + selectedCity,
-                type: 'GET',
-                success: function(data) {
-                    var weatherHtml = '<p>Location: ' + data.location + '</p>' +
-                      '<p>Weather Description: ' + data.weather_description + '</p>' +
-                      '<p>Relative Humidity: ' + data.rel_humidity + '</p>' +
-                      '<p>Timestamp: ' + data.timestamp + '</p>' +
-                      '<p>Temperature (Celsius): ' + data.temp_celsius + '</p>' +
-                      '<p>Wind Direction: ' + data.wind_direction + '</p>' +
-                      '<p>Wind Speed (mps): ' + data.windSpeed_mps + '</p>';
-                    $('#weatherData').html(weatherHtml);
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-        });
-
-        $("#getAllWeather").click(function(){
-            $.ajax({
-                url: 'http://localhost:8080/weather-all',
-                type: 'GET',
-                success: function(data) {
-                    var weatherHtml = '';
-                    for (var i = 0; i < data.length; i++) {
-                        weatherHtml += '<p>Location: ' + data[i].location + '</p>' +
-                          '<p>Weather Description: ' + data[i].weather_description + '</p>' +
-                          '<p>Relative Humidity: ' + data[i].rel_humidity + '</p>' +
-                          '<p>Timestamp: ' + data[i].timestamp + '</p>' +
-                          '<p>Temperature (Celsius): ' + data[i].temp_celsius + '</p>' +
-                          '<p>Wind Direction: ' + data[i].wind_direction + '</p>' +
-                          '<p>Wind Speed (mps): ' + data[i].windSpeed_mps + '</p><hr>';
-                    }
-                    $('#weatherData').html(weatherHtml);
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
+   $(document).ready(function(){
+    $("#getWeather").click(function(){
+        var selectedCity = $("#citySelect").val();
+        $.ajax({
+            url: '/weather/' + selectedCity,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var weatherHtml = '<p>Location: ' + data.location + '</p>' +
+                  '<p>Weather Description: ' + data.weather_description + '</p>' +
+                  '<p>Relative Humidity: ' + data.rel_humidity + '</p>' +
+                  '<p>Timestamp: ' + data.timestamp + '</p>' +
+                  '<p>Temperature (Celsius): ' + data.temp_celsius + '</p>' +
+                  '<p>Wind Direction: ' + data.wind_direction + '</p>' +
+                  '<p>Wind Speed (mps): ' + data.windSpeed_mps + '</p>';
+                $('#weatherData').html(weatherHtml);
+            },
+            error: function(error) {
+                console.log(error);
+            }
         });
     });
+
+    $("#getAllWeather").click(function(){
+        $.ajax({
+            url: '/weather-all',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var weatherHtml = '';
+                for (var i = 0; i < data.length; i++) {
+                    weatherHtml += '<p>Location: ' + data[i].location + '</p>' +
+                      '<p>Weather Description: ' + data[i].weather_description + '</p>' +
+                      '<p>Relative Humidity: ' + data[i].rel_humidity + '</p>' +
+                      '<p>Timestamp: ' + data[i].timestamp + '</p>' +
+                      '<p>Temperature (Celsius): ' + data[i].temp_celsius + '</p>' +
+                      '<p>Wind Direction: ' + data[i].wind_direction + '</p>' +
+                      '<p>Wind Speed (mps): ' + data[i].windSpeed_mps + '</p><hr>';
+                }
+                $('#weatherData').html(weatherHtml);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>
